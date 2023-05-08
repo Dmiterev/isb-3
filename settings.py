@@ -5,12 +5,12 @@ logger = logging.getLogger()
 logger.setLevel('INFO')
 
 settings = {
-    'initial_file':'path/to/inital/file.txt',
-    'encrypted_file':'path/to/encrypted/file.txt',
-    'decrypted_file':'path/to/decrypted/file.txt',
-    'symmetric_key':'path/to/symmetric/key.txt',
-    'public_key':'path/to/public/key.pem',
-    'secret_key':'path/to/secret/key.pem',
+    'initial_file':'initial_file.txt',
+    'encrypted_file': 'encrypted_file.txt',
+    'decrypted_file': 'decrypted_file.txt',
+    'symmetric_key': 'symmetric_key.txt',
+    'public_key': 'public_key.pem',
+    'secret_key': 'secret_key.pem',
 }
 
 if __name__ == "__main__":
