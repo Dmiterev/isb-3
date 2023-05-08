@@ -46,7 +46,7 @@ def symmetric_text_decryption(read_file: str, symmetric_key: bytes, write_file: 
         logging.info(f' Текст считан из {read_file}!')
     except OSError as err:
         logging.warning(f'{err} Ошибка при чтении {read_file}!')
-    iv = os.urandom(8)
+    c_text, iv = c_text[8:], c_text[:8]
     cipher = Cipher(algorithms.IDEA(symmetric_key), modes.CBC(iv))
     decryptor = cipher.decryptor()
     dc_text = decryptor.update(c_text) + decryptor.finalize()
