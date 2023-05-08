@@ -1,6 +1,7 @@
 import logging
 import os
 from cryptography.hazmat.primitives.asymmetric import padding
+from cryptography.hazmat.primitives import padding as s_padding
 from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives.serialization import load_pem_private_key
 from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
@@ -40,17 +41,18 @@ def symmetric_text_decryption(read_file: str, symmetric_key: bytes, write_file: 
     :param write_file: Путь к файлу сохранения.
     """
     try:
-        with open(read_file, mode='rb') as text_file:
+        with open(read_file, 'rb') as text_file:
             c_text = text_file.read()
         logging.info(f' Текст считан из {read_file}!')
     except OSError as err:
         logging.warning(f'{err} Ошибка при чтении {read_file}!')
-    iv = os.urandom(16)
+    iv = os.urandom(8)
     cipher = Cipher(algorithms.IDEA(symmetric_key), modes.CBC(iv))
     decryptor = cipher.decryptor()
     dc_text = decryptor.update(c_text) + decryptor.finalize()
-    unpadder = padding.ANSIX923(128).unpadder()
+    unpadder = s_padding.ANSIX923(64).unpadder()
     unpadded_dc_text = unpadder.update(dc_text) + unpadder.finalize()
+    logging.info('Текст расшифрован!')
     try:
         with open(write_file, 'wb') as f:
             f.write(unpadded_dc_text)

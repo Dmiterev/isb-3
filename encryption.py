@@ -2,6 +2,7 @@ import logging
 import os
 from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
 from cryptography.hazmat.primitives.asymmetric import padding
+from cryptography.hazmat.primitives import padding as s_padding
 from cryptography.hazmat.primitives import hashes
 
 logger = logging.getLogger()
@@ -27,20 +28,22 @@ def symmetric_text_encryption(read_file: str, symmetric_key: bytes, write_file: 
     :param write_file: Путь к файлу сохранения.
     """
     try:
-        with open(read_file, mode='rb') as text_file:
+        with open(read_file, 'rb') as text_file:
             text = text_file.read()
         logging.info(f' Текст считан из {read_file}!')
     except OSError as err:
         logging.warning(f'{err} Ошибка при чтении {read_file}!')
-    padder = padding.ANSIX923(128).padder()
+    padder = s_padding.ANSIX923(64).padder()
     padded_text = padder.update(text) + padder.finalize()
-    iv = os.urandom(16)
+    iv = os.urandom(8)
     cipher = Cipher(algorithms.IDEA(symmetric_key), modes.CBC(iv))
     encryptor = cipher.encryptor()
     c_text = encryptor.update(padded_text) + encryptor.finalize()
+    logging.info('Текст зашифрован!')
     try:
         with open(write_file, 'wb') as f_text:
             f_text.write(c_text)
         logging.info(f'Текст записан в {write_file}')
     except OSError as err:
         logging.warning(f'{err} Ошибка при записи текста в {write_file}')
+
