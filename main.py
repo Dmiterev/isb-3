@@ -1,6 +1,7 @@
 import argparse
 import json
 import logging
+import os
 from generation import symmetric_generation_key, asymmetric_generation_keys, write_symmetric_key
 from encryption import asymmetric_encryption, symmetric_text_encryption
 from decryption import asymmetric_decryption, symmetric_text_decryption
@@ -35,7 +36,7 @@ if __name__ == "__main__":
     if args.settings:
         settings = read_settings(args.settings)
     else:
-        settings = read_settings("data/settings.json")
+        settings = read_settings(os.path.join("data", "settings.json"))
     if args.generation:
         symmetric_key = symmetric_generation_key(16)
         logging.info('Симметричный ключ сгенерирован!')
