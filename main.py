@@ -35,15 +35,15 @@ if __name__ == "__main__":
     if args.settings:
         settings = read_settings(args.settings)
     else:
-        settings = read_settings("settings.json")
-    if args.generation is not None:
+        settings = read_settings("data/settings.json")
+    if args.generation:
         symmetric_key = symmetric_generation_key(16)
         logging.info('Симметричный ключ сгенерирован!')
         public_key = asymmetric_generation_keys(settings['secret_key'], settings['public_key'])
         cipher_symmetric_key = asymmetric_encryption(public_key, symmetric_key)
         logging.info('Симметричный ключ зашифрован!')
         write_symmetric_key(settings['symmetric_key'], cipher_symmetric_key)
-    elif args.encryption is not None:
+    elif args.encryption:
         symmetric_key = asymmetric_decryption(settings['secret_key'], settings['symmetric_key'])
         logging.info('Симметричный ключ расшифрован!')
         symmetric_text_encryption(settings['initial_file'], symmetric_key, settings['encrypted_file'])
